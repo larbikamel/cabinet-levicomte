@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Cabinet LV">
+  <meta name="theme-color" content="#1558a3">
+  <title>Cabinet Le Vicomte</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+</head>
+<body>
+
+  <!-- ── Écran de connexion ── -->
+  <div id="screen-login" class="screen active">
+    <div class="login-container">
+      <div class="login-logo">
+        <div class="logo-circle">LK</div>
+        <div class="login-title">Cabinet Le Vicomte</div>
+        <div class="login-sub">Dr LARBI Kamel — Chirurgien Plasticien</div>
+        <div class="login-sub2">Sousse, Tunisie</div>
+      </div>
+      <button id="btn-google-login" class="btn-google">
+        <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Se connecter avec Google
+      </button>
+      <div id="login-status" class="login-status"></div>
+      <div class="login-info">Vos données restent dans votre Google Drive personnel</div>
+    </div>
+  </div>
+
+  <!-- ── Écran de chargement ── -->
+  <div id="screen-loading" class="screen">
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <div id="loading-text" class="loading-text">Connexion en cours…</div>
+    </div>
+  </div>
+
+  <!-- ── App principale ── -->
+  <div id="screen-app" class="screen">
+
+    <!-- Barre de navigation du bas -->
+    <nav class="bottom-nav">
+      <button class="nav-btn active" data-view="patients" onclick="showView('patients')">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span>Patients</span>
+      </button>
+      <button class="nav-btn" data-view="search" onclick="showView('search')">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <span>Recherche</span>
+      </button>
+      <button class="nav-btn" data-view="sync" onclick="showView('sync')">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.3"/></svg>
+        <span>Sync</span>
+      </button>
+    </nav>
+
+    <!-- Vue : Liste patients -->
+    <div id="view-patients" class="view active">
+      <header class="app-header">
+        <div class="header-title">
+          <span id="header-patient-count" class="header-count">0 patients</span>
+        </div>
+        <button class="btn-icon" onclick="showAddPatient()">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+      </header>
+      <div class="search-bar-inline">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="search" id="patient-search-inline" placeholder="Rechercher un patient…" oninput="filterPatients(this.value)">
+      </div>
+      <div id="patient-list" class="patient-list"></div>
+    </div>
+
+    <!-- Vue : Dossier patient -->
+    <div id="view-dossier" class="view">
+      <header class="app-header">
+        <button class="btn-back" onclick="showView('patients')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div id="dossier-patient-name" class="header-title-main">Dossier</div>
+      </header>
+      <!-- Onglets du dossier -->
+      <div class="dossier-tabs">
+        <button class="dtab active" onclick="switchDossierTab('infos')">Infos</button>
+        <button class="dtab" onclick="switchDossierTab('antecedents')">ATCD</button>
+        <button class="dtab" onclick="switchDossierTab('cro')">CRO</button>
+        <button class="dtab" onclick="switchDossierTab('preop')">Préop</button>
+        <button class="dtab" onclick="switchDossierTab('certificats')">Cert.</button>
+      </div>
+      <div id="dossier-content" class="dossier-content"></div>
+    </div>
+
+    <!-- Vue : Recherche -->
+    <div id="view-search" class="view">
+      <header class="app-header">
+        <div class="header-title-main">Recherche</div>
+      </header>
+      <div class="search-container">
+        <input type="search" id="global-search" placeholder="Nom, intervention, date…" oninput="globalSearch(this.value)" class="search-input-full" autofocus>
+        <div id="search-results" class="search-results"></div>
+      </div>
+    </div>
+
+    <!-- Vue : Synchronisation -->
+    <div id="view-sync" class="view">
+      <header class="app-header">
+        <div class="header-title-main">Synchronisation</div>
+      </header>
+      <div class="sync-container">
+        <div class="sync-card">
+          <div class="sync-status-icon" id="sync-icon">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.3"/></svg>
+          </div>
+          <div id="sync-last-time" class="sync-time">Dernière sync : —</div>
+          <div id="sync-db-info" class="sync-info">—</div>
+          <button class="btn-primary btn-full" onclick="syncNow()">Synchroniser maintenant</button>
+          <button class="btn-secondary btn-full" onclick="showImportDB()" style="margin-top:8px;background:#e8f0fb;color:#1558a3;border-color:#1558a3;">
+            Importer base de données (.json)
+          </button>
+          <button class="btn-secondary btn-full" onclick="confirmLogout()" style="margin-top:8px;">Se déconnecter</button>
+        </div>
+        <div class="sync-card" style="margin-top:12px;">
+          <div class="sync-section-title">Compte Google connecté</div>
+          <div id="user-info" class="user-info-row">
+            <div id="user-name" class="user-name">—</div>
+            <div id="user-email" class="user-email">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Modal : Nouveau patient ── -->
+  <div id="modal-add-patient" class="modal-overlay" style="display:none;">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <div class="modal-title">Nouveau patient</div>
+      <div class="form-group">
+        <label class="form-label">Prénom *</label>
+        <input class="form-input" id="np-prenom" placeholder="Prénom" autocomplete="given-name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Nom *</label>
+        <input class="form-input" id="np-nom" placeholder="NOM" autocomplete="family-name" style="text-transform:uppercase;">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Date de naissance</label>
+        <input class="form-input" id="np-ddn" type="date">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Sexe</label>
+        <select class="form-select" id="np-sexe">
+          <option value="">—</option>
+          <option value="F">Féminin</option>
+          <option value="M">Masculin</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Téléphone</label>
+        <input class="form-input" id="np-tel" type="tel" placeholder="+216 xx xxx xxx">
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="closeModal('modal-add-patient')">Annuler</button>
+        <button class="btn-primary" onclick="saveNewPatient()">Créer le dossier</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Modal : Nouveau CRO ── -->
+  <div id="modal-add-cro" class="modal-overlay" style="display:none;">
+    <div class="modal-sheet modal-sheet-full">
+      <div class="modal-handle"></div>
+      <div class="modal-title">Nouveau CRO</div>
+      <div id="cro-form-content"></div>
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="closeModal('modal-add-cro')">Annuler</button>
+        <button class="btn-primary" onclick="saveCRO()">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Toast ── -->
+  <div id="toast" class="toast"></div>
+
+  <!-- Scripts -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="js/auth.js"></script>
+  <script src="js/drive.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/patients.js"></script>
+  <script src="js/cro.js"></script>
+  <script src="js/certificats.js"></script>
+
+</body>
+</html>
