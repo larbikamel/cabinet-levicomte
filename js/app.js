@@ -46,6 +46,7 @@ async function initApp() {
     renderPatients();
     updateSyncUI();
     updateUserUI();
+    buildEquipeDatalist();
   } catch(e) {
     showScreen('login');
     document.getElementById('login-status').textContent = 'Erreur : ' + e.message;
@@ -128,6 +129,7 @@ function renderDossierTab(tab) {
   else if (tab === 'cro')     renderTabCRO(container, patient, db);
   else if (tab === 'preop')   renderTabPreop(container, patient, db);
   else if (tab === 'certificats') renderTabCertificats(container, patient, db);
+  else if (tab === 'equipe')  renderTabEquipeDB(container, patient, db);
 }
 
 // ─── Onglet Infos patient ─────────────────────────
@@ -361,7 +363,16 @@ function showAddIntervention() {
 }
 
 function printBilanPreop() {
-  toast('Impression bilan — fonctionnalité en cours d\'implémentation');
+  toast("Impression bilan — fonctionnalité en cours d'implémentation");
+}
+
+function renderTabEquipeDB(container, patient, db) {
+  container.innerHTML = `
+    <div style="margin-bottom:12px;font-size:13px;color:var(--text3);">
+      Gérez ici les membres de l'équipe — ils apparaîtront en suggestions dans les CRO.
+    </div>
+    <div id="equipe-manager-content"></div>`;
+  renderEquipeManager();
 }
 
 function globalSearch(query) {
