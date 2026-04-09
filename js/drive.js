@@ -23,6 +23,13 @@ function emptyDB() {
     documents: [],
     rdv: [],
     suivis: [],
+    equipe_db: {
+      anesthesistes: [],
+      techniciens: [],
+      instrumentistes: [],
+      circulantes: [],
+      salles: []
+    },
     version: '29',
     created_at: new Date().toISOString()
   };
@@ -91,6 +98,12 @@ async function readDB() {
   _db.documents     = _db.documents     || [];
   _db.rdv           = _db.rdv           || [];
   _db.suivis        = _db.suivis        || [];
+  _db.equipe_db     = _db.equipe_db     || { anesthesistes:[], techniciens:[], instrumentistes:[], circulantes:[], salles:[] };
+  _db.equipe_db.anesthesistes  = _db.equipe_db.anesthesistes  || [];
+  _db.equipe_db.techniciens    = _db.equipe_db.techniciens    || [];
+  _db.equipe_db.instrumentistes= _db.equipe_db.instrumentistes|| [];
+  _db.equipe_db.circulantes    = _db.equipe_db.circulantes    || [];
+  _db.equipe_db.salles         = _db.equipe_db.salles         || [];
 
   // Cache local
   localStorage.setItem('clv_db_cache', JSON.stringify(_db));
