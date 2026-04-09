@@ -36,6 +36,8 @@ function renderTabCRO(container, patient, db) {
           <div class="cro-actions">
             <button class="btn-secondary btn-sm" onclick="editCROMobile(${c.id})">Modifier</button>
             <button class="btn-secondary btn-sm" onclick="printCROFromList(${c.id})">Imprimer</button>
+            <button class="btn-translate" onclick="translateCROWeb(${c.id},'en')" title="English PDF">EN</button>
+            <button class="btn-translate" onclick="translateCROWeb(${c.id},'ar')" title="النسخة العربية">ع</button>
             <button class="btn-secondary btn-sm" style="color:var(--danger);" onclick="deleteCROMobile(${c.id})">Supprimer</button>
           </div>
         </div>`).join('')}`;
@@ -108,6 +110,7 @@ function showAddCRO(croData) {
   } catch(e) {}
 
   showModal('modal-add-cro');
+  setTimeout(() => attachEquipeAutocomplete(), 150);
   if (d.type_intervention) setTimeout(() => onCROTypeMobileChange(d.type_intervention, d), 120);
 }
 
