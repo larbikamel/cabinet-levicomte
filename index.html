@@ -10,6 +10,16 @@
   <title>Cabinet Le Vicomte</title>
   <link rel="manifest" href="manifest.json">
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    .btn-translate {
+      padding: 5px 10px; font-size: 11px; font-weight: 700;
+      border: 1.5px solid var(--accent); border-radius: 50px;
+      background: var(--accent-light); color: var(--accent);
+      cursor: pointer; letter-spacing: 0.05em;
+    }
+    .btn-translate:active { background: var(--accent); color: white; }
+    .btn-translate:disabled { opacity: 0.5; cursor: not-allowed; }
+  </style>
   <link rel="apple-touch-icon" href="icons/icon-192.png">
 </head>
 <body>
@@ -91,6 +101,7 @@
         <button class="dtab" onclick="switchDossierTab('cro')">CRO</button>
         <button class="dtab" onclick="switchDossierTab('preop')">Préop</button>
         <button class="dtab" onclick="switchDossierTab('certificats')">Cert.</button>
+        <button class="dtab" onclick="switchDossierTab('equipe')">Équipe</button>
       </div>
       <div id="dossier-content" class="dossier-content"></div>
     </div>
@@ -132,6 +143,15 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- Carnet d'équipe -->
+    <div class="sync-card" style="margin-top:12px;">
+      <div class="sync-section-title">Carnet d'équipe opératoire</div>
+      <div id="equipe-manager-content"></div>
+      <button class="btn-primary btn-full" onclick="renderEquipeManager()" style="margin-top:10px;">
+        Gérer l'équipe
+      </button>
     </div>
 
   </div>
@@ -196,6 +216,8 @@
   <script src="js/patients.js"></script>
   <script src="js/cro.js"></script>
   <script src="js/certificats.js"></script>
+  <script src="js/equipe.js"></script>
+  <script src="js/translate.js"></script>
 
 </body>
 </html>
